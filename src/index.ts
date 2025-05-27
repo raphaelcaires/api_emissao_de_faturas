@@ -1,16 +1,17 @@
 import Fastify from 'fastify'
+import { chargesRoutes } from './routes/charges.routes'
 
-const app = Fastify()
+const server = Fastify()
 const port = 3000
 
-app.get('/health', async () => {
-  return { status: 'OK' }
-})
+server.register(chargesRoutes)
 
-app.listen({ port: port }, err => {
+server.get('/', async () => { return { status: 'OK' } })
+
+server.listen({ port: port }, err => {
   if (err) {
-    app.log.error(err)
+    console.error(err)
     process.exit(1)
   }
-  console.log(`🚀 Server listening on http://localhost:${port}`)
+  console.log(`🚀 Servidor em execução em http://localhost:${port}`)
 })
