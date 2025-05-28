@@ -1,14 +1,12 @@
 import Fastify from 'fastify'
-import { chargesRoutes } from './routes/charges.routes'
+import { chargesRoutes } from './routes/charges.route'
+import { healthRoute } from './routes/health.route'
 
 const app = Fastify({
   logger: true,
 })
 
+app.register(healthRoute)
 app.register(chargesRoutes)
-
-app.get('/', async () => {
-  return { status: 'OK' }
-})
 
 export default app
