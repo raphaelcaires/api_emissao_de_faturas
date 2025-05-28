@@ -34,6 +34,18 @@ Teste Técnico – Desenvolvedor Backend
    npm run dev
    ```
 
+## Testes
+
+Para executar os testes:
+
+```bash
+npm test
+```
+
+> **IMPORTANTE:** Os testes requerem **Node.js na versão 22.14.0**. Outras versões podem causar erros relacionados ao `diagnostics.tracingChannel`.
+
+![Resultado dos testes](./public/image/testes.png)
+
 ## Execução com Docker
 
 Existem duas maneiras de executar a aplicação com Docker:
