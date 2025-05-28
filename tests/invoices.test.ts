@@ -6,47 +6,71 @@ describe('GET /invoices', () => {
     ChargesRepository.clearAll()
   })
 
-  it('deve gerar faturas agrupadas e remover cobranças', async () => {
+  it('deve gerar faturas agrupadas por partnerId e ordenar por total decrescente', async () => {
     const charges = [
       {
-        chargeId: 'c-003',
-        partnerId: 'net',
-        amount: 200,
-        reference: 'internet',
-        timestamp: new Date().toISOString(),
+        chargeId: 'c001',
+        partnerId: 'net-01',
+        amount: 200.0,
+        reference: '2024-01',
+        timestamp: '2024-01-15T10:00:00Z',
       },
       {
-        chargeId: 'c-004',
-        partnerId: 'claro',
-        amount: 150,
-        reference: 'tv',
-        timestamp: new Date().toISOString(),
+        chargeId: 'c002',
+        partnerId: 'claro-12',
+        amount: 150.0,
+        reference: '2024-01',
+        timestamp: '2024-01-15T10:00:00Z',
       },
       {
-        chargeId: 'c-005',
-        partnerId: 'net',
-        amount: 300,
-        reference: 'telefone',
-        timestamp: new Date().toISOString(),
+        chargeId: 'c003',
+        partnerId: 'net-01',
+        amount: 300.0,
+        reference: '2024-01',
+        timestamp: '2024-01-15T10:00:00Z',
       },
     ]
 
     await app.inject({ method: 'POST', url: '/charges', payload: charges })
 
-    const invoiceResponse = await app.inject({
-      method: 'GET',
-      url: '/invoices',
-    })
+    const response = await app.inject({ method: 'GET', url: '/invoices' })
+    expect(response.statusCode).toBe(200)
 
-    expect(invoiceResponse.statusCode).toBe(200)
+    const invoices = response.json()
+    expect(invoices).toHaveLength(2)
+    expect(invoices[0].partnerId).toBe('net-01')
+    expect(invoices[0].total).toBe(500)
+    expect(invoices[1].partnerId).toBe('claro-12')
+    expect(invoices[1].total).toBe(150)
+  })
 
-    const body = invoiceResponse.json()
-    expect(body.length).toBe(2)
+  it('deve remover as cobranças da memória após gerar as faturas', async () => {
+    const charges = [
+      {
+        chargeId: 'c001',
+        partnerId: 'net-01',
+        amount: 200.0,
+        reference: '2024-01',
+        timestamp: '2024-01-15T10:00:00Z',
+      },
+      {
+        chargeId: 'c002',
+        partnerId: 'claro-12',
+        amount: 150.0,
+        reference: '2024-01',
+        timestamp: '2024-01-15T10:00:00Z',
+      },
+      {
+        chargeId: 'c003',
+        partnerId: 'net-01',
+        amount: 300.0,
+        reference: '2024-01',
+        timestamp: '2024-01-15T10:00:00Z',
+      },
+    ]
 
-    expect(body[0].partnerId).toBe('net')
-    expect(body[0].total).toBe(500)
-
-    const after = ChargesRepository.getAll()
-    expect(after.length).toBe(0)
+    await app.inject({ method: 'POST', url: '/charges', payload: charges })
+    await app.inject({ method: 'GET', url: '/invoices' })
+    expect(ChargesRepository.getAll()).toHaveLength(0)
   })
 })
