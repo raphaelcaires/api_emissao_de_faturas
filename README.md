@@ -87,7 +87,7 @@ Requisições para a API devem seguir os padrões:
 |---|---|---|
 | `POST` | Registra cobranças no sistema. | /charges |
 | `GET` | Gera e retorna as faturas agrupadas por parceiro. | /invoices |
-| `GET` | Verifica status de saúde da API. | / |
+| `GET` | Verifica status da API. | / |
 
 ### 1. Registrar Cobranças
 
