@@ -34,12 +34,31 @@ Teste Técnico – Desenvolvedor Backend
    npm run dev
    ```
 
-6. Ou use Docker para iniciar a aplicação
+## Execução com Docker
 
-   ```
-   docker build -t api-emissao-de-faturas .
-   docker run -p 3333:3333 api-emissao-de-faturas
-   ```
+Existem duas maneiras de executar a aplicação com Docker:
+
+### Usando Docker diretamente
+
+```bash
+# Construir a imagem
+docker build -t api-emissao-de-faturas .
+
+# Executar o contêiner na porta 3000
+docker run -p 3000:3000 api-emissao-de-faturas
+```
+
+### Usando Docker Compose
+
+```bash
+# Construir e iniciar com docker-compose
+docker-compose up --build
+
+# Para parar os contêineres
+docker-compose down
+```
+
+**Nota**: Certifique-se de que a porta 3000 não está sendo usada por outra aplicação.
 
 ## Documentação da API REST
 
@@ -56,7 +75,7 @@ Requisições para a API devem seguir os padrões:
 |---|---|---|
 | `POST` | Registra cobranças no sistema. | /charges |
 | `GET` | Gera e retorna as faturas agrupadas por parceiro. | /invoices |
-| `GET` | Verifica status da API. | / |
+| `GET` | Verifica status de saúde da API. | / |
 
 ### 1. Registrar Cobranças
 
@@ -203,7 +222,7 @@ Endpoint simples para verificar se a API está online.
 A documentação completa da API está disponível através do Swagger UI em:
 
 ```
-http://localhost:3333/docs
+http://localhost:3000/docs
 ```
 
 ## Tecnologias Utilizadas
