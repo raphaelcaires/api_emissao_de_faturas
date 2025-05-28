@@ -11,7 +11,7 @@ export async function postChargeHandler(
     return {
       chargeId: charge.chargeId || 'sem chargeId',
       status: result.status,
-      message: result.message
+      message: result.message,
     }
   })
 
@@ -25,11 +25,13 @@ export async function postChargeHandler(
   invalids.forEach(i => messages.push(i.message))
 
   let statusCode = 207
-  if (added.length > 0 && duplicates.length === 0 && invalids.length === 0) statusCode = 201
-  if (added.length === 0 && (duplicates.length > 0 || invalids.length > 0)) statusCode = 400
+  if (added.length > 0 && duplicates.length === 0 && invalids.length === 0)
+    statusCode = 201
+  if (added.length === 0 && (duplicates.length > 0 || invalids.length > 0))
+    statusCode = 400
 
   return reply.status(statusCode).send({
     success: true,
-    processed: results
+    processed: results,
   })
 }
