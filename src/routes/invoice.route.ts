@@ -1,6 +1,5 @@
 import { FastifyInstance } from 'fastify'
 import { getInvoicesHandler } from '../controllers/invoices.controller'
-import { InvoiceSchema } from '../schemas/invoice.schema'
 import { ChargeSchema } from '../schemas/charge.schema'
 
 export async function invoicesRoutes(server: FastifyInstance) {
