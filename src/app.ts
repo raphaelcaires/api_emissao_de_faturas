@@ -4,9 +4,14 @@ import { healthRoute } from './routes/health.route'
 import { invoicesRoutes } from './routes/invoice.route'
 import fastifySwagger from '@fastify/swagger'
 import fastifySwaggerUi from '@fastify/swagger-ui'
+import fastifyCors from '@fastify/cors'
 
 const app = Fastify({
   logger: true,
+})
+
+app.register(fastifyCors, {
+  origin: '*',
 })
 
 app.register(fastifySwagger, {
