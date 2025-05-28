@@ -3,14 +3,33 @@ import { Charge } from '../models/charge.model'
 import { addCharge } from '../services/charges.service'
 
 export async function postChargeHandler(
-  request: FastifyRequest<{ Body: Charge }>,
+  request: FastifyRequest<{ Body: Charge[] }>,
   reply: FastifyReply
 ) {
-  const result = addCharge(request.body)
+  const results = request.body.map(charge => {
+    const result = addCharge(charge)
+    return {
+      chargeId: charge.chargeId || 'sem chargeId',
+      status: result.status,
+      message: result.message
+    }
+  })
 
-  if (!result.success) {
-    return reply.status(400).send({ error: result.message })
-  }
+  const added = results.filter(r => r.status === 'added')
+  const duplicates = results.filter(r => r.status === 'duplicate')
+  const invalids = results.filter(r => r.status === 'invalid')
 
-  return reply.status(201).send({ message: result.message })
+  const messages: string[] = []
+
+  duplicates.forEach(d => messages.push(d.message))
+  invalids.forEach(i => messages.push(i.message))
+
+  let statusCode = 207
+  if (added.length > 0 && duplicates.length === 0 && invalids.length === 0) statusCode = 201
+  if (added.length === 0 && (duplicates.length > 0 || invalids.length > 0)) statusCode = 400
+
+  return reply.status(statusCode).send({
+    success: true,
+    processed: results
+  })
 }
