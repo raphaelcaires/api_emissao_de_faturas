@@ -15,12 +15,6 @@ export const ChargesRepository = {
     return Array.from(chargesMap.values())
   },
 
-  clearMany: (chargeIds: string[]) => {
-    for (const id of chargeIds) {
-      chargesMap.delete(id)
-    }
-  },
-
   clearAll: () => {
     chargesMap.clear()
   },
