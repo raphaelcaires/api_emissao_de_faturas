@@ -1,6 +1,6 @@
 # API de Emissão de Faturas
 
-Teste Técnico – Desenvolvedor Backend
+Desenvolvimento da API de emissão de faturas
 
 ## Instalação
 
